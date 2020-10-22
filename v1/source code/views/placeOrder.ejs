@@ -1,0 +1,39 @@
+<%- include ("partials/header") %>
+
+<h1>
+	Check the information
+</h1>
+
+
+<% if(items != null) { %>
+	<% items.forEach(function(item){ %>
+	<lable for="Product">Product: </lable><%= item.PRODUCT_NAME %>
+	<lable for="Price"> Price: </lable><%= item.PRICE %>
+	<% }); %>	
+<% }; %>
+
+<div>
+	<label for="cardNumber">cardNumber: </label><%= cardInfo[0].cardNumber %>
+</div>
+<div>
+	<lable for="shipAddress">Ship Address: </lable><%= ship[0].address %> 
+</div>
+<div>
+	<label for="phoneNumber">Phone Number: </label><%= ship[0].phoneNumber %>
+</div>
+
+
+
+<form action='/finish', method='POST'>
+	<div class="form-group">
+		<input type="hidden" value='<%= items[0].PRODUCT_ID %>'  name='productID'>
+		<input type="hidden" value='<%= items[0].PRODUCT_NAME%>' name='productName'>
+		<input type="hidden" value='<%= items[0].PRICE %>'       name='productPrice'>
+		<input type="hidden" value='<%= %>' name='customerID'>
+		<input type="hidden" value='<%= cardInfo[0].cardNumber %>' name='cardNumber'>
+		<button class="btn btn-lg btn-primary btn-block">Place the order</button>
+	</div>
+</form>
+
+
+<%- include ("partials/footer") %>

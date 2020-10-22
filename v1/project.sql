@@ -1,0 +1,257 @@
+
+  CREATE TABLE CUSTOMERS                                            
+   (CUSTOMER_ID VARCHAR(10) NOT NULL ,                                             
+	FIRSTNAME VARCHAR(20) NOT NULL ,                                     
+	MIDDLENAME VARCHAR(20),
+	LASTNAME VARCHAR(20) NOT NULL ,
+	CUSTOMER_PHONENUMBER VARCHAR(20),
+    FREQUENCY NUMERIC(1) DEFAULT 0 NOT NULL,
+    ADDRESS VARCHAR(50),
+    PASSWORD VARCHAR(128),
+    CHECK(FREQUENCY IN (0,1)),
+	 PRIMARY KEY (CUSTOMER_ID)                                            
+   );
+-- FREQUENCY 0 means INFREQUENT CUSTOMER, 1 means FREQUENT CUSTOMER.
+-- ASSUME THAT ADDRESS IS SINGLE VALUED AND SIMPLE ATTRIBUTE.
+-- ASSUME THAT PHONENUMBER IS SINGLE VALUED.
+
+
+
+  CREATE TABLE EMAIL
+   (EMAILNUMBER VARCHAR(20),
+   CUSTOMER_ID VARCHAR(10),
+   PRIMARY KEY (EMAILNUMBER),
+   FOREIGN KEY (CUSTOMER_ID) REFERENCES CUSTOMER(CUSTOMER_ID)
+    );
+                                                                                
+                                                                                
+                                                                                
+  CREATE TABLE ORDERS                                               
+   (ORDER_ID VARCHAR(10) NOT NULL ,                                       
+	PRODUCT_NAME VARCHAR(20) NOT NULL ,
+    TIMEPERIOD TIME,
+	TOTAL_PRICE NUMERIC(10,2),
+   	CUSTOMER_ID CHAR(10) NOT NULL,
+    SEASON VARCHAR(20),
+    REGION VARCHAR(20),
+    PRODUCT_NUMBER INT,
+	STATUS NUMERIC(1) DEFAULT 0 NOT NULL,
+    CARDNUMBER VARCHAR(20),
+    TRACKINGNUMBER VARCHAR(10),
+	 PRIMARY KEY (ORDER_ID) ,
+	 FOREIGN KEY (CUSTOMER_ID)
+	 REFERENCES CUSTOMERS (CUSTOMER_ID) ON DELETE CASCADE,
+     FOREIGN KEY (PRODUCT_ID)
+	 REFERENCES PRODUCT (PRODUCT_ID) ON DELETE CASCADE,
+     FOREIGN KEY (CARDNUMBER)
+	 REFERENCES CREDITCARD (CARDNUMBER) ON DELETE CASCADE,
+     FOREIGN KEY (TRACKINGNUMBER)
+	 REFERENCES SHIP (TRACKINGNUMBER) ON DELETE CASCADE,
+	CHECK(STATUS IN (0,1))
+   );
+-- ORDER HAS TO BE PAID.
+-- STATUS 0 means UNPAID, 1 means PAID.
+-- RECORD REGION, SEASON, TIME AND OTHER IMPORTANT INFORMATION OFR FUTURE DATA ALANYSIS.
+                                                                                                                       
+                                                                                
+
+  CREATE TABLE COMPANY                                                 
+   (COMP_ID VARCHAR(10),
+    COMP_NAME VARCHAR(20),
+    COMP_PHONENUMBER VARCHAR(20),
+    WEBSITE VARCHAR(20),
+    PRIMARY KEY (COMP_ID)
+   );
+
+
+
+  CREATE TABLE PRODUCT                                              
+   (PRODUCT_ID VARCHAR(10),
+	PRODUCT_NAME VARCHAR(20),
+    PRODUCT_TYPE VARCHAR(10),
+    MANUFACTURER VARCHAR(10),
+	PRICE NUMERIC(10,2),
+    PRIMARY KEY (PRODUCT_ID)
+   );
+
+                                                          
+                                                                                
+                                                                                
+  CREATE TABLE STORES                                                
+   (STORE_ID VARCHAR(10),
+	STORE_NAME VARCHAR(20),
+	STORE_ADDRESS VARCHAR(20),
+	PHONENUMBER VARCHAR(20),
+	STORE_REGION VARCHAR(10),
+    COMP_ID VARCHAR(10),
+    PRIMARY KEY (STORE_ID,COMP_ID),
+    FOREIGN KEY (COMP_ID)
+    REFERENCES COMPANY (COPM_ID) ON DELETE CASCADE
+   );                                                  
+-- STORES IS WEAK ENTITY.                                                                                
+
+                                                                                
+                                                                                
+  CREATE TABLE INVENTORY_OF_STORE                                            
+   (STORE_ID VARCHAR(10),
+	PRODUCT_ID VARCHAR(10),
+	PRODUCT_NUMBER INT,
+	 PRIMARY KEY (STORE_ID, PRODUCT_ID) ,
+	 FOREIGN KEY (STORE_ID)                           
+	  REFERENCES STORES (STORE_ID) ON DELETE CASCADE ,
+	 FOREIGN KEY (PRODUCT_ID)                         
+	  REFERENCES PRODUCT (PRODUCT_ID) ON DELETE CASCADE
+   );                                                  
+-- USED TO RECORD THE NUMBER OF PRODUCTS IN STORE.     
+     
+     
+                                                                                
+ CREATE TABLE WAREHOUSE                                                
+   (WARE_ID CHAR(10),
+	WARE_NAME VARCHAR(20),
+	WARE_ADDRESS VARCHAR(20),
+	PHONENUMBER VARCHAR(20),
+	WARE_REGION VARCHAR(10),
+    COMP_ID VARCHAR(10),
+    PRIMARY KEY (WARE_ID,COMP_ID),
+    FOREIGN KEY (COMP_ID)
+    REFERENCES COMPANY (COPM_ID) ON DELETE CASCADE
+   );    
+-- WAREHOUSE IS WEAK ENTITY.   
+  
+                    
+                                                                                
+ CREATE TABLE INVENTORY_OF_WAREHOUSE                                            
+   (WARE_ID VARCHAR(10),
+	PRODUCT_ID VARCHAR(10),
+	PRODUCT_NUMBER INT,
+	 PRIMARY KEY (WARE_ID, PRODUCT_ID) ,
+	 FOREIGN KEY (WARE_ID)                           
+	  REFERENCES WAREHOUSE (WARE_ID) ON DELETE CASCADE ,
+	 FOREIGN KEY (PRODUCT_ID)                         
+	  REFERENCES PRODUCT (PRODUCT_ID) ON DELETE CASCADE
+   );                                                  
+-- USED TO RECORD THE NUMBER OF PRODUCTS IN WAREHOUSE.     
+
+
+
+CREATE TABLE CREDITCARD                                        
+   (CARDNUMBER VARCHAR(20),
+	EXP_DATE DATE,
+	CVV NUMERIC(3),
+	NAME VARCHAR(10),
+    CUSTOMER_ID VARCHAR(10),
+	 PRIMARY KEY (CARDNUMBER),
+	 FOREIGN KEY (CUSTOMER_ID)                    
+	  REFERENCES CUSTOMERS (CUSTOMER_ID) ON DELETE CASCADE                                
+   );                                                  
+-- EACH CUSTOMER CAN HAVE MULTIPLE CREDITCARDS.
+                                                                                
+
+ CREATE TABLE SHIP                                                
+   (TRACKINGNUMBER VARCHAR(10),
+	SHIPCOMPANY VARCHAR(20),
+    SHIP_DATE DATE,
+	ADDRESS VARCHAR(50),
+	PHONENUMBER VARCHAR(20),
+    COMP_ID VARCHAR(10),
+    PRIMARY KEY (TRACKINGNUMBER),
+    FOREIGN KEY (ADDRESS)
+    REFERENCES CUSTOMERS (ASDDRESS) ON DELETE CASCADE,
+    FOREIGN KEY (COMP_ID)
+    REFERENCES COMPANY (COMP_ID) ON DELETE CASCADE
+   );                                                                                   
+       
+                                                                         
+ CREATE TABLE MANUFACTURERS                                                
+   (MANU_ID VARCHAR(10),
+	MANU_NAME VARCHAR(20),
+	MANU_PHONENUMBER VARCHAR(20),
+    PRIMARY KEY (MANU_ID)                                   
+   );  
+
+
+
+ CREATE TABLE REORDER                                                
+   (REORDER_ID VARCHAR(10),
+	REOEDER_ADDRESS VARCHAR(20),
+	REORDER_NUMBER INT,
+    MANU_ID VARCHAR(10),
+    PRODUCT_ID VARCHAR(10),
+    PRIMARY KEY (REORDER_ID),
+    FOREIGN KEY (MANU_ID)
+    REFERENCES MANUFACTURERS (MANU_ID) ON DELETE CASCADE,
+    FOREIGN KEY (PRODUCT_ID)
+    REFERENCES PRODUCT (PRODUCT_ID) ON DELETE CASCADE
+   );  
+
+
+
+ CREATE TABLE INQUIRY                                                
+   (CUSTOMER_ID VARCHAR(10),
+	COMP_ID VARCHAR(10),
+	TRACKINGNUMBER VARCHAR(10),
+    PRIMARY KEY (CUSTOMER_ID, COMP_ID),
+    FOREIGN KEY (CUSTOMER_ID) REFERENCES CUSTOMERS ON DELETE CASCADE,
+    FOREIGN KEY (COMP_ID) REFERENCES COMPANY ON DELETE CASCADE
+   );  
+-- COMPANY SHOULD GIVE THE TRACKING NUMBER TO CUSTOMER WHEN THEY INQUIRY.   
+   
+   
+   
+   
+CREATE INDEX INDEX_CUSTOMER_ID ON CUSTOMER(CUSTOMER_ID);
+CREATE INDEX INDEX_PRODUCT_ID ON PRODUCT(PRODUCT_ID);
+CREATE INDEX INDEX_STORE_ID ON STORES(STORE_ID);
+CREATE INDEX INDEX_WARE_ID ON WAREHOUSE(WARE_ID);
+CREATE INDEX INDEX_COMP_ID ON COMPANY(COMP_ID);
+
+
+
+INSERT INTO CUSTOMERS(CUSTOMER_ID, FIRSTNAME, MIDDLENAME, LASTNAME, CUSTOMER_PHONENUMBER, FREQUENCY, ADDRESS, PASSWORD) VALUES('5', 'kelong', NULL, 'chen', '1234', O, '1234', '1234');
+
+INSERT INTO EMAIL(EMAILNUMBER, CUSTOMER_ID) VALUES('1234@qq.com', '1');
+
+INSERT INTO ORDERS(ORDER_ID, PRODUCT_NAME, TOTAL_PRICE, CUSTOMER_ID, PRODUCT_NUMBER, STATUS, CARDNUMBER, TRACKINGNUMBER) VALUES('1', 'laptop', '3000', '5', 1, O, '1234', '123321');
+
+INSERT INTO COMPANY(COMP_ID, COMP_NAME, COMP_PHONENUMBER, WEBSITE) VALUES('1', 'Best Buy',  '123', 'WWW.BESTBUY.COM');
+
+INSERT INTO PRODUCT(PRODUCT_ID, PRODUCT_NAME, PRODUCT_TYPE, MANUFACTURER) VALUES('laptop',  'Electronic', 'Apple');
+
+INSERT INTO STORES(STORE_ID, STORE_NAME, STORE_ADDRESS, PHONENUMBER) VALUES('SOUTH LOOP BEST BUY',  'SOUTH LOOP', '123321');
+
+INSERT INTO INVENTORY_OF_STORE(STORE_ID, PRODUCT_ID, PRODUCT_NUMBER) VALUES('1', '1', 10);
+
+INSERT INTO CREDITCARD(CARDNUMBER, EXP_DATE, CVV, NAME, CUSTOMER_ID) VALUES('123', '123', '123', 'kelong chen', '1');
+
+INSERT INTO SHIP(TRACKINGNUMBER, SHIPCOMANY, SHIP_DATE,ADDRESS, PHONENUMBER, CUSTOMER_ID) VALUES('123321', 'UPS', 'MAY/01', '1234','1234', '5');
+
+INSERT INTO MANUFATURER(MANU_ID, MANU_NAME, MANU_PHONENUMEBR) VALUES('1', 'Apple',  '123');
+
+INSERT INTO REORDER(REORDER_ID, REORDER_ADDRESS, REORDER_NUMBER, MANU_ID, PRODUCT_ID) VALUES('1', 'CHICAGO',  10, '1', '1');
+
+INSERT INTO INQUIRY(CUSTOMER_ID, COMP_ID, TRACKINGNUMBER) VALUES('1',  '1', '123321');
+
+
+
+
+UPDATE CUSTOMERS SET FIRSTNAME = 'KE', LASTNAME = 'CH', PHONENUMBER = '4321', ADDRESS = '321' WHERE CUSTOMER_ID='5';
+
+UPDATE EMAIL SET EMAILNUMBER = '4321@qq.com' WHERE CUSTOMER_ID='5';
+
+UPDATE ORDERS SET STATUS = 1 WHERE ORDER_ID='1';
+
+UPDATE INVENTORY_OF_STORE SET PRODUCT_NUMBER = PRODUCT_NUMBER - 1 WHERE ORDER_ID = '1' AND STATUS = 1;
+
+-- TO CHECK SHOPPING HISTORY OF CUSTOMER 1
+SELECT * FROM ORDERS WHERE CUSTOMER_ID = '1' AND STATUS = 1;
+
+
+
+
+
+
+
+
+
+

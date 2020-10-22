@@ -1,0 +1,27 @@
+<%- include("partials/header") %>
+
+
+<h1>
+	This is profile page!
+</h1>
+
+<div>
+	<ul>
+		<li>Customer_ID: <%= customer.CUSTOMER_ID %> </li>
+		<li>Email: <%= customer.EMAIL %>             </li>
+		<li>First Name: <%= customer.FIRSTNAME %>    </li>
+		<li>Middle Name:<%= customer.MIDDLENAME %>   </li>
+		<li>Last Name: <%= customer.LASTNAME %>      </li>
+		<li>Phone number: <%= customer.CUSTOMER_PHONENUMBER %> </li>
+		<li>Address:   <%=customer.ADDRESS %>        </li>
+		<button><a href='/history'>history</a></button>
+	</ul>
+</div>
+<form action='/profile/edit' method='POST'>
+	<input type="hidden" value = '<%= customer.CUSTOMER_ID %>' name="customerID">
+	<button>Edit your profile</button>
+</form>
+
+
+
+<%- include("partials/footer") %>

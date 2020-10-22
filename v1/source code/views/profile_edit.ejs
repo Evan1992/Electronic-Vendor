@@ -1,0 +1,43 @@
+<%- include ("partials/header") %>
+
+<div class="container">
+	<div class="row">
+		<h1 style="text-align: center">
+			Edit your profile
+		</h1>
+		<div style="width: 30%; margin: 25px auto;">
+			<form action="/profile/edit/success" method="POST">
+				<div class="form-group">
+					<label for="firstName">First Name</label>
+					<!-- name attribute is used for call this variable -->
+					<input class="form-control" type="text" name="firstName">
+				</div>
+				<div class="form-group">
+					<label for="middleName">Middle Name</label>
+					<input class="form-control" type="text" name="middleName"
+				</div>
+				<div class="form-group">
+					<label for="lastName">Last Name</label>
+					<input class="form-control" type="text" name="lastName"
+				</div>
+				<div class="form-group">
+					<lable for="phoneNumber">Phone Number</lable>
+					<input class="form-control" type="text" name="phoneNumber">
+				</div>
+				<div class="form-group">
+					<lable for="address">Address</lable>
+					<input class="form-control" type="text" name="address">
+				</div>
+				<input style="hidden" value= '<%= customerID %>' name='customerID'>
+				<div class="form-group">
+					<button class="btn btn-lg btn-primary btn-block">Submit the Change</button>
+				</div>
+			</form>
+			<a href="/profile">Go Back</a>
+		</div>
+	</div>
+</div>
+
+
+
+<%- include ("partials/footer") %>

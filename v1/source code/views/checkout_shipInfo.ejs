@@ -1,0 +1,22 @@
+<%- include ("partials/header") %>
+
+<h1>
+	This is Ship Information Page
+</h1>
+
+<form action='/placeOrder', method='POST'>
+	<div class="form-group">
+		<label for="address">Address</label>
+		<input class="form-control" type="text" name="address" required placeholder="Required">
+	</div>
+	<div class="form-group">
+		<label for="phoneNumber">Phone Number</label>
+		<input class="form-control" type="text" name="phoneNumber" required placeholder="Required">
+	</div>
+	<div class="form-group">
+		<button class="btn btn-lg btn-primary btn-block">Submit</button>
+	</div>
+</form>
+
+
+<%- include ("partials/footer") %>

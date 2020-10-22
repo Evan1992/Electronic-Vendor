@@ -1,0 +1,21 @@
+<%- include("partials/header") %>
+
+<h1>
+	This is Cart Page!
+</h1>
+
+<% if(items != null) { %>
+	<% items.forEach(function(item){ %>
+	<ul>
+		<bold>Product:</bold> <%= item.PRODUCT_NAME %>     <bold>Price:</bold> <%= item.PRICE %>
+	</ul>
+	<% }); %>	
+<% }; %>
+
+<form action="/checkout_cardInfo" method="POST">
+	<button>Proceed to checkout</button>
+</form>
+
+
+
+<%- include("partials/footer") %>
